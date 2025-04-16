@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tsikonina Admin - Panel d'Administration
 
-## Getting Started
+Panel d'administration pour la gestion des recettes malgaches de l'application Tsikonina.
 
-First, run the development server:
+## À Propos
+
+Tsikonina Admin est l'interface d'administration qui permet de gérer le contenu de l'application mobile Tsikonina. Cette plateforme permet aux administrateurs de :
+
+- Gérer les recettes (ajout, modification, suppression)
+- Gérer les catégories de recettes
+- Gérer les utilisateurs et leurs permissions
+- Modérer les commentaires et contributions
+
+## Fonctionnalités
+
+- 🔐 Authentification sécurisée avec Supabase
+- 📝 Gestion complète des recettes (CRUD)
+- 🖼️ Gestion des images avec Supabase Storage
+- 📊 Tableau de bord avec statistiques
+- 👥 Gestion des utilisateurs et rôles
+- 🔍 Recherche et filtrage avancés
+
+## Technologies Utilisées
+
+- Next.js (App Router + TypeScript)
+- Supabase (PostgreSQL + Auth + Storage)
+- ShadCN/UI pour l'interface utilisateur
+- React Hook Form + Zod pour la validation
+- Lucide-React pour les icônes
+
+## Prérequis
+
+- Node.js 18+
+- pnpm
+- Compte Supabase
+
+## Installation
+
+1. Clonez le dépôt :
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone [URL_DU_REPO]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Installez les dépendances :
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Configurez les variables d'environnement :
 
-## Learn More
+Créez un fichier `.env.local` à la racine du projet avec les variables suivantes :
 
-To learn more about Next.js, take a look at the following resources:
+```env
+NEXT_PUBLIC_SUPABASE_URL=votre_url_supabase
+NEXT_PUBLIC_SUPABASE_ANON_KEY=votre_clé_anon_supabase
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. Lancez le serveur de développement :
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm dev
+```
 
-## Deploy on Vercel
+5. Ouvrez [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Structure du Projet
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+tsikonina-admin/
+├── app/                    # Pages et routes
+├── components/            # Composants réutilisables
+├── lib/                  # Utilitaires et configurations
+├── public/               # Fichiers statiques
+└── types/               # Types TypeScript
+```
+
+## Contribution
+
+Les contributions sont les bienvenues ! Pour contribuer :
+
+1. Forker le projet
+2. Créer une branche pour votre fonctionnalité
+3. Commiter vos changements
+4. Pousser vers la branche
+5. Ouvrir une Pull Request
+
+## Sécurité
+
+- Toutes les routes d'administration sont protégées
+- Validation des données côté serveur
+- Protection CSRF
+- Gestion des permissions basée sur les rôles
+
+## Contact
+
+Pour toute question ou suggestion, contactez-nous à [VOTRE_EMAIL].
+
+## Licence
+
+Ce projet est sous licence [VOTRE_LICENCE].
