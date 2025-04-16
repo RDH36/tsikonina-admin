@@ -1,8 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -16,8 +15,10 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { Loader2, Mail, Lock } from "lucide-react"
+import { login } from "@/app/(auth)/login/actions"
 
-const formSchema = z.object({
+export const formSchema = z.object({
   email: z.string().email("Email invalide"),
   password: z
     .string()
@@ -26,8 +27,7 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const [error, setError] = useState<string | null>(null)
-  const router = useRouter()
-  const supabase = createClientComponentClient()
+  const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -39,27 +39,21 @@ export function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: values.email,
-        password: values.password,
-      })
-
+      setIsLoading(true)
+      setError("")
+      const { error } = await login(values)
       if (error) {
         setError(error.message)
         return
       }
-
-      router.refresh()
-      router.push("/dashboard")
-    } catch (error) {
-      console.error("Erreur lors de la connexion:", error)
-      setError("Une erreur est survenue")
+    } finally {
+      setIsLoading(false)
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
           name="email"
@@ -67,7 +61,15 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="votre@email.com" {...field} />
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    placeholder="votre@email.com"
+                    {...field}
+                    disabled={isLoading}
+                    className="pl-10"
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -80,15 +82,35 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Mot de passe</FormLabel>
               <FormControl>
-                <Input type="password" placeholder="••••••••" {...field} />
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    type="password"
+                    placeholder="••••••••"
+                    {...field}
+                    disabled={isLoading}
+                    className="pl-10"
+                  />
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {error && <div className="text-sm text-red-500">{error}</div>}
-        <Button type="submit" className="w-full">
-          Se connecter
+        {error && (
+          <div className="rounded-md bg-destructive/10 p-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Connexion en cours...
+            </>
+          ) : (
+            "Se connecter"
+          )}
         </Button>
       </form>
     </Form>

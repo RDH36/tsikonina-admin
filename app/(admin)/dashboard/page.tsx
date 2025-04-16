@@ -1,11 +1,10 @@
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs"
-import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { BookOpen, Users } from "lucide-react"
+import { createClient } from "@/utils/supabase/server"
 
 export default async function DashboardPage() {
-  const supabase = createServerComponentClient({ cookies })
+  const supabase = await createClient()
 
   const {
     data: { session },
@@ -15,7 +14,6 @@ export default async function DashboardPage() {
     redirect("/login")
   }
 
-  // Récupérer les statistiques
   const { data: recettesCount } = await supabase
     .from("recettes")
     .select("*", { count: "exact" })
