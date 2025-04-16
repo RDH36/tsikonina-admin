@@ -1,16 +1,16 @@
-import { redirect } from "next/navigation"
-import { LoginForm } from "@/components/auth/login-form"
-import { createClient } from "@/utils/supabase/server"
-import Link from "next/link"
+import { LoginForm } from "@/components/auth/login-form";
+import { createClient } from "@/utils/supabase/server";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
-  const supabase = await createClient()
+  const supabase = await createClient();
   const {
     data: { session },
-  } = await supabase.auth.getSession()
+  } = await supabase.auth.getSession();
 
   if (session) {
-    redirect("/dashboard")
+    redirect("/dashboard");
   }
 
   return (
@@ -26,11 +26,12 @@ export default async function Home() {
             </p>
           </div>
           <LoginForm />
-          <div className="text-center text-sm text-muted-foreground">
-            <p className="text-xs ">
-              © {new Date().getFullYear()} Tsikonina. Made with ❤️ by{" "}
+          <div className="text-center text-sm text-muted-foreground flex flex-col gap-2">
+            <p className="text-xs">© {new Date().getFullYear()} Tsikonina.</p>
+            <p className="text-xs">
+              Made with ❤️ by{" "}
               <Link
-                href="https://github.com/RDH36  "
+                href="https://github.com/RDH36"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-primary"
@@ -42,5 +43,5 @@ export default async function Home() {
         </div>
       </div>
     </div>
-  )
+  );
 }
