@@ -1,30 +1,31 @@
-import { z } from "zod";
+import { z } from "zod"
 
 export const recipeFormSchema = z.object({
+  id: z.string().optional(),
   title: z.string().min(1, "Le titre est requis"),
   description: z.string().min(1, "La description est requise"),
-  difficulty: z.enum(["facile", "moyen", "difficile"], {
+  image: z.any().optional(),
+  time: z.number().min(1, "Le temps de préparation est requis"),
+  difficulty: z.enum(["Facile", "Moyen", "Difficile"], {
     required_error: "La difficulté est requise",
   }),
-  cookingTime: z.number().min(1).max(60),
-  mainImage: z.string().nullable(),
-  tags: z.array(z.string()).min(1, "Au moins un tag est requis"),
-  ingredients: z
+  category: z.string().min(1, "La catégorie est requise"),
+  isPremium: z.boolean(),
+  region: z.string().min(1, "La région est requise"),
+  history: z.string().min(1, "L'historique est requis"),
+  culturalContext: z.string().min(1, "Le contexte culturel est requis"),
+  ingredients: z.array(z.string()).min(1, "Au moins un ingrédient est requis"),
+  substitutes: z
     .array(
       z.object({
-        quantity: z.string().min(1, "La quantité est requise"),
-        name: z.string().min(1, "Le nom de l'ingrédient est requis"),
+        original: z.string(),
+        substitutes: z.array(z.string()),
       })
     )
-    .min(1, "Au moins un ingrédient est requis"),
-  steps: z
-    .array(
-      z.object({
-        description: z.string().min(1, "La description de l'étape est requise"),
-        image: z.string().nullable(),
-      })
-    )
-    .min(1, "Au moins une étape est requise"),
-});
+    .optional(),
+  instructions: z
+    .array(z.string())
+    .min(1, "Au moins une instruction est requise"),
+})
 
-export type RecipeFormValues = z.infer<typeof recipeFormSchema>;
+export type RecipeFormValues = z.infer<typeof recipeFormSchema>
