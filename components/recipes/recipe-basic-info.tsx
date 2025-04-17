@@ -84,7 +84,7 @@ export function RecipeBasicInfo({ control }: RecipeBasicInfoProps) {
               </FormItem>
             )}
           />
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={control}
               name="time"
@@ -130,7 +130,7 @@ export function RecipeBasicInfo({ control }: RecipeBasicInfoProps) {
               )}
             />
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FormField
               control={control}
               name="category"
@@ -148,7 +148,7 @@ export function RecipeBasicInfo({ control }: RecipeBasicInfoProps) {
               control={control}
               name="isPremium"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 sm:p-4">
                   <div className="space-y-0.5">
                     <FormLabel className="text-base">Recette Premium</FormLabel>
                   </div>

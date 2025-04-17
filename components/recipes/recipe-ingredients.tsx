@@ -43,11 +43,11 @@ function SubstituteField({ control, index, onRemove }: SubstituteFieldProps) {
 
   return (
     <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-      <div className="flex gap-4">
+      <div className="flex gap-2 sm:gap-4">
         <div className="flex-1 space-y-4">
           <div className="flex items-center gap-2">
             <CollapsibleTrigger asChild>
-              <Button variant="ghost" size="sm">
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                 <ChevronDown
                   className={`h-4 w-4 transition-transform ${
                     isOpen ? "" : "-rotate-90"
@@ -60,7 +60,9 @@ function SubstituteField({ control, index, onRemove }: SubstituteFieldProps) {
               name={`substitutes.${index}.original`}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>Ingrédient à remplacer {index + 1}</FormLabel>
+                  <FormLabel className="text-sm">
+                    Ingrédient à remplacer {index + 1}
+                  </FormLabel>
                   <FormControl>
                     <Input placeholder="Ex: Bœuf" {...field} />
                   </FormControl>
@@ -72,13 +74,15 @@ function SubstituteField({ control, index, onRemove }: SubstituteFieldProps) {
           <CollapsibleContent>
             <div className="space-y-4">
               {subFields.map((subField, subIndex) => (
-                <div key={subField.id} className="flex gap-4">
+                <div key={subField.id} className="flex gap-2 sm:gap-4">
                   <FormField
                     control={control}
                     name={`substitutes.${index}.substitutes.${subIndex}`}
                     render={({ field }) => (
                       <FormItem className="flex-1">
-                        <FormLabel>Substitut {subIndex + 1}</FormLabel>
+                        <FormLabel className="text-sm">
+                          Substitut {subIndex + 1}
+                        </FormLabel>
                         <FormControl>
                           <Input placeholder="Ex: Poulet" {...field} />
                         </FormControl>
@@ -90,7 +94,7 @@ function SubstituteField({ control, index, onRemove }: SubstituteFieldProps) {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="mt-8"
+                    className="mt-8 h-8 w-8"
                     onClick={() => removeSub(subIndex)}
                   >
                     <Trash2 className="h-4 w-4" />
@@ -101,9 +105,10 @@ function SubstituteField({ control, index, onRemove }: SubstituteFieldProps) {
                 type="button"
                 variant="outline"
                 size="sm"
+                className="h-8"
                 onClick={() => appendSub("")}
               >
-                <Plus className="mr-2 h-4 w-4" />
+                <Plus className="mr-2 h-3 w-3" />
                 Ajouter un substitut
               </Button>
             </div>
@@ -113,7 +118,7 @@ function SubstituteField({ control, index, onRemove }: SubstituteFieldProps) {
           type="button"
           variant="ghost"
           size="icon"
-          className="mt-8"
+          className="mt-8 h-8 w-8"
           onClick={onRemove}
         >
           <Trash2 className="h-4 w-4" />
@@ -142,11 +147,11 @@ export function RecipeIngredients({ control }: RecipeIngredientsProps) {
   })
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       <Collapsible open={isIngredientsOpen} onOpenChange={setIsIngredientsOpen}>
         <div className="flex items-center gap-2 mb-4">
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
               <ChevronDown
                 className={`h-4 w-4 transition-transform ${
                   isIngredientsOpen ? "" : "-rotate-90"
@@ -154,27 +159,32 @@ export function RecipeIngredients({ control }: RecipeIngredientsProps) {
               />
             </Button>
           </CollapsibleTrigger>
-          <h2 className="text-xl font-semibold flex-1">Ingrédients</h2>
+          <h2 className="text-lg sm:text-xl font-semibold flex-1">
+            Ingrédients
+          </h2>
           <Button
             type="button"
             variant="outline"
             size="sm"
+            className="h-8"
             onClick={() => append("")}
           >
-            <Plus className="mr-2 h-4 w-4" />
-            Ajouter un ingrédient
+            <Plus className="mr-2 h-3 w-3" />
+            Ajouter
           </Button>
         </div>
         <CollapsibleContent>
           <div className="space-y-4">
             {fields.map((field, index) => (
-              <div key={field.id} className="flex gap-4">
+              <div key={field.id} className="flex gap-2 sm:gap-4">
                 <FormField
                   control={control}
                   name={`ingredients.${index}`}
                   render={({ field }) => (
                     <FormItem className="flex-1">
-                      <FormLabel>Ingrédient {index + 1}</FormLabel>
+                      <FormLabel className="text-sm">
+                        Ingrédient {index + 1}
+                      </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="Ex: 500g de bœuf, coupé en cubes"
@@ -189,7 +199,7 @@ export function RecipeIngredients({ control }: RecipeIngredientsProps) {
                   type="button"
                   variant="ghost"
                   size="icon"
-                  className="mt-8"
+                  className="mt-8 h-8 w-8"
                   onClick={() => remove(index)}
                 >
                   <Trash2 className="h-4 w-4" />
@@ -203,7 +213,7 @@ export function RecipeIngredients({ control }: RecipeIngredientsProps) {
       <Collapsible open={isSubstitutesOpen} onOpenChange={setIsSubstitutesOpen}>
         <div className="flex items-center gap-2 mb-4">
           <CollapsibleTrigger asChild>
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
               <ChevronDown
                 className={`h-4 w-4 transition-transform ${
                   isSubstitutesOpen ? "" : "-rotate-90"
@@ -211,19 +221,20 @@ export function RecipeIngredients({ control }: RecipeIngredientsProps) {
               />
             </Button>
           </CollapsibleTrigger>
-          <h2 className="text-xl font-semibold flex-1">
+          <h2 className="text-lg sm:text-xl font-semibold flex-1">
             Ingrédients de substitution
           </h2>
           <Button
             type="button"
             variant="outline"
             size="sm"
+            className="h-8"
             onClick={() =>
               appendSubstitute({ original: "", substitutes: [""] })
             }
           >
-            <Plus className="mr-2 h-4 w-4" />
-            Ajouter une substitution
+            <Plus className="mr-2 h-3 w-3" />
+            Ajouter
           </Button>
         </div>
         <CollapsibleContent>

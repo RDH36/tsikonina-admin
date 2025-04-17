@@ -43,18 +43,20 @@ export function RecipeForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="relative">
-        <div className="sticky top-0 z-10 bg-background py-4 border-b mb-6">
-          <div className="flex items-center justify-between max-w-[1200px] mx-auto px-6">
-            <h1 className="text-3xl font-bold">Ajouter une recette</h1>
-            <div className="space-x-2">
-              <Button type="submit" className="cursor-pointer">
+        <div className="sticky top-0 z-10 bg-background py-3 border-b">
+          <div className="flex items-center justify-between max-w-[1200px] mx-auto px-4 sm:px-6">
+            <h1 className="text-xl sm:text-3xl font-bold">
+              Ajouter une recette
+            </h1>
+            <div>
+              <Button type="submit" size="sm" className="cursor-pointer">
                 Enregistrer
               </Button>
             </div>
           </div>
         </div>
 
-        <div className="max-w-[1200px] mx-auto px-6 space-y-6 pb-20">
+        <div className="max-w-[1200px] mx-auto p-4 sm:px-6 space-y-6 pb-20">
           <RecipeMainImage control={form.control} />
           <RecipeBasicInfo control={form.control} />
           <RecipeCulturalInfo control={form.control} />
