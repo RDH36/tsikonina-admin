@@ -9,7 +9,9 @@ export const recipeFormSchema = z.object({
   difficulty: z.enum(["Facile", "Moyen", "Difficile"], {
     required_error: "La difficulté est requise",
   }),
-  category: z.string().min(1, "La catégorie est requise"),
+  category: z.enum(["normal", "populaire", "decouverte"], {
+    required_error: "La catégorie est requise",
+  }),
   isPremium: z.boolean(),
   region: z.string().min(1, "La région est requise"),
   history: z.string().min(1, "L'historique est requis"),

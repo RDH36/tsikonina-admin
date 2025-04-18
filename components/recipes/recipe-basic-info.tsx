@@ -1,10 +1,7 @@
 "use client"
 
 import { Control } from "react-hook-form"
-import {
-  RecipeFormValues,
-  recipeFormSchema,
-} from "@/app/(admin)/recipes/schemas"
+import { RecipeFormValues } from "@/app/(admin)/recipes/schemas"
 import {
   FormControl,
   FormField,
@@ -32,8 +29,14 @@ import {
 import { useState } from "react"
 
 interface RecipeBasicInfoProps {
-  control: Control<RecipeFormValues, typeof recipeFormSchema>
+  control: Control<RecipeFormValues>
 }
+
+const CATEGORIES = [
+  { value: "normal", label: "Normal" },
+  { value: "populaire", label: "Populaire" },
+  { value: "decouverte", label: "Découverte" },
+] as const
 
 export function RecipeBasicInfo({ control }: RecipeBasicInfoProps) {
   const [isOpen, setIsOpen] = useState(true)
@@ -137,9 +140,23 @@ export function RecipeBasicInfo({ control }: RecipeBasicInfoProps) {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Catégorie</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Ex: Populaire" {...field} />
-                  </FormControl>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value || "normal"}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Sélectionnez la catégorie" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {CATEGORIES.map((category) => (
+                        <SelectItem key={category.value} value={category.value}>
+                          {category.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}

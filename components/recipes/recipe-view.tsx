@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
-import { Clock, ChefHat, Crown } from "lucide-react"
+import { Clock, ChefHat, Crown, Loader2 } from "lucide-react"
 import { Recipe } from "@/types/recipe"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -10,6 +10,7 @@ import { Pencil, Trash2 } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 import { createClient } from "@/utils/supabase/client"
+import { useState } from "react"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,44 +30,58 @@ interface RecipeViewProps {
 export function RecipeView({ recipe }: RecipeViewProps) {
   const router = useRouter()
   const supabase = createClient()
+  const [isDeleting, setIsDeleting] = useState(false)
 
   const handleDelete = async () => {
     try {
-      // Supprimer l'image si elle existe
+      setIsDeleting(true)
       if (recipe.image_url) {
-        // Extraire le nom du fichier de l'URL
-        const imagePath = recipe.image_url.split("/").pop()
-        if (imagePath) {
-          const { error: storageError } = await supabase.storage
-            .from("recipes")
-            .remove([imagePath])
+        try {
+          const fileName = recipe.image_url.split("/").pop()
+          if (fileName) {
+            console.log("Tentative de suppression de l'image:", fileName)
 
-          if (storageError) {
-            console.error(
-              "Erreur lors de la suppression de l'image:",
-              storageError
-            )
-            toast.error("Erreur lors de la suppression de l'image")
-            return
+            const { error: storageError } = await supabase.storage
+              .from("recipes")
+              .remove([`recipes/${fileName}`])
+
+            if (storageError) {
+              console.error(
+                "Erreur lors de la suppression de l'image:",
+                storageError
+              )
+              toast.error("Erreur lors de la suppression de l'image")
+              setIsDeleting(false)
+              return
+            }
+
+            console.log("Image supprimée avec succès")
           }
+        } catch (error) {
+          console.error("Erreur lors de la suppression de l'image:", error)
+          // On continue même si la suppression de l'image échoue
         }
       }
 
-      // Supprimer la recette
       const { error: deleteError } = await supabase
         .from("recipes")
         .delete()
         .eq("id", recipe.id)
 
-      if (deleteError) throw deleteError
+      if (deleteError) {
+        throw deleteError
+      }
 
       toast.success("Recette supprimée avec succès")
       router.push("/recipes")
+      router.refresh()
     } catch (error) {
       console.error("Erreur lors de la suppression de la recette:", error)
       toast.error(
         "Une erreur est survenue lors de la suppression de la recette"
       )
+    } finally {
+      setIsDeleting(false)
     }
   }
 
@@ -76,14 +91,14 @@ export function RecipeView({ recipe }: RecipeViewProps) {
         <h1 className="text-3xl font-bold">{recipe.title}</h1>
         <div className="flex gap-2">
           <Link href={`/recipes/${recipe.id}/edit`}>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" disabled={isDeleting}>
               <Pencil className="mr-2 h-4 w-4" />
               Modifier
             </Button>
           </Link>
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <Button variant="destructive" size="sm">
+              <Button variant="destructive" size="sm" disabled={isDeleting}>
                 <Trash2 className="mr-2 h-4 w-4" />
                 Supprimer
               </Button>
@@ -97,9 +112,22 @@ export function RecipeView({ recipe }: RecipeViewProps) {
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Annuler</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete}>
-                  Supprimer
+                <AlertDialogCancel disabled={isDeleting}>
+                  Annuler
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="gap-2"
+                >
+                  {isDeleting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Suppression...
+                    </>
+                  ) : (
+                    "Supprimer"
+                  )}
                 </AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
