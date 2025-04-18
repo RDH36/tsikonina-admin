@@ -138,7 +138,7 @@ export function RecipeBasicInfo({ control }: RecipeBasicInfoProps) {
                 <FormItem>
                   <FormLabel>Catégorie</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Malagasy" {...field} />
+                    <Input placeholder="Ex: Populaire" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

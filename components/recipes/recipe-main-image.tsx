@@ -2,7 +2,7 @@
 
 import { Camera, X } from "lucide-react"
 import Image from "next/image"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useRef, useState } from "react"
 import { Control } from "react-hook-form"
 
 import { RecipeFormValues } from "@/app/(admin)/recipes/schemas"
@@ -24,6 +24,7 @@ export function RecipeMainImage({
   initialImage = null,
 }: RecipeMainImageProps) {
   const [preview, setPreview] = useState<string | null>(initialImage || null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleMainImageChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -46,17 +47,26 @@ export function RecipeMainImage({
     onChange(null)
   }
 
+  const handleImageAreaClick = () => {
+    if (!isLoading && fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }
+
   return (
     <Card>
       <CardContent className="p-6">
         <FormField
           control={control}
           name="image"
-          render={({ field: { onChange, ...field } }) => (
+          render={({ field: { onChange } }) => (
             <FormItem>
               <Label>Image principale</Label>
               <div className="mt-2">
-                <div className="relative aspect-video rounded-lg overflow-hidden">
+                <div
+                  className="relative aspect-video rounded-lg overflow-hidden cursor-pointer"
+                  onClick={handleImageAreaClick}
+                >
                   {preview ? (
                     <>
                       <Image
@@ -70,25 +80,32 @@ export function RecipeMainImage({
                         variant="destructive"
                         size="icon"
                         className="absolute top-2 right-2"
-                        onClick={() => removeMainImage(onChange)}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          removeMainImage(onChange)
+                        }}
                         disabled={isLoading}
                       >
                         <X className="h-4 w-4" />
                       </Button>
                     </>
                   ) : (
-                    <div className="w-full h-full bg-muted flex items-center justify-center">
+                    <div className="w-full h-full bg-muted flex flex-col items-center justify-center gap-2">
                       <Camera className="h-12 w-12 text-muted-foreground" />
+                      <span className="text-sm text-muted-foreground">
+                        Cliquez pour ajouter une image
+                      </span>
                     </div>
                   )}
                 </div>
                 <Input
+                  ref={fileInputRef}
                   type="file"
                   accept="image/*"
-                  className="mt-4"
+                  className="hidden"
                   onChange={(e) => handleMainImageChange(e, onChange)}
                   disabled={isLoading}
-                  {...field}
+                  value=""
                 />
               </div>
               <FormMessage />
