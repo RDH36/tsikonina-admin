@@ -15,7 +15,7 @@ export default async function DashboardPage() {
   }
 
   const { data: recettesCount } = await supabase
-    .from("recettes")
+    .from("recipes")
     .select("*", { count: "exact" })
 
   const { data: usersCount } = await supabase

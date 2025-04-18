@@ -14,25 +14,36 @@ import { Label } from "@/components/ui/label"
 
 interface RecipeMainImageProps {
   control: Control<RecipeFormValues>
+  isLoading?: boolean
+  initialImage?: string | null
 }
 
-export function RecipeMainImage({ control }: RecipeMainImageProps) {
-  const [mainImage, setMainImage] = useState<string | null>(null)
+export function RecipeMainImage({
+  control,
+  isLoading = false,
+  initialImage = null,
+}: RecipeMainImageProps) {
+  const [preview, setPreview] = useState<string | null>(initialImage || null)
 
-  const handleMainImageChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleMainImageChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    onChange: (file: File | null) => void
+  ) => {
     const file = e.target.files?.[0]
     if (file) {
       const reader = new FileReader()
       reader.onloadend = () => {
         const result = reader.result as string
-        setMainImage(result)
+        setPreview(result)
+        onChange(file)
       }
       reader.readAsDataURL(file)
     }
   }
 
-  const removeMainImage = () => {
-    setMainImage(null)
+  const removeMainImage = (onChange: (file: File | null) => void) => {
+    setPreview(null)
+    onChange(null)
   }
 
   return (
@@ -41,50 +52,44 @@ export function RecipeMainImage({ control }: RecipeMainImageProps) {
         <FormField
           control={control}
           name="image"
-          render={({ field }) => (
+          render={({ field: { onChange, ...field } }) => (
             <FormItem>
-              <div className="relative flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-300 p-12">
-                {mainImage ? (
-                  <div className="relative aspect-video w-full max-w-2xl">
-                    <Image
-                      src={mainImage}
-                      alt="Photo principale"
-                      fill
-                      className="rounded-lg object-cover"
-                      onLoad={() => {
-                        field.onChange(mainImage)
-                      }}
-                    />
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      size="icon"
-                      className="absolute -right-2 -top-2 h-8 w-8"
-                      onClick={() => {
-                        removeMainImage()
-                        field.onChange(null)
-                      }}
-                    >
-                      <X className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ) : (
-                  <>
-                    <Camera className="mb-4 h-12 w-12 text-gray-400" />
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      id="main-image"
-                      onChange={handleMainImageChange}
-                    />
-                    <Label htmlFor="main-image">
-                      <Button type="button" variant="outline" asChild>
-                        <span>Télécharger la photo</span>
+              <Label>Image principale</Label>
+              <div className="mt-2">
+                <div className="relative aspect-video rounded-lg overflow-hidden">
+                  {preview ? (
+                    <>
+                      <Image
+                        src={preview}
+                        alt="Preview"
+                        fill
+                        className="object-cover"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="icon"
+                        className="absolute top-2 right-2"
+                        onClick={() => removeMainImage(onChange)}
+                        disabled={isLoading}
+                      >
+                        <X className="h-4 w-4" />
                       </Button>
-                    </Label>
-                  </>
-                )}
+                    </>
+                  ) : (
+                    <div className="w-full h-full bg-muted flex items-center justify-center">
+                      <Camera className="h-12 w-12 text-muted-foreground" />
+                    </div>
+                  )}
+                </div>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  className="mt-4"
+                  onChange={(e) => handleMainImageChange(e, onChange)}
+                  disabled={isLoading}
+                  {...field}
+                />
               </div>
               <FormMessage />
             </FormItem>

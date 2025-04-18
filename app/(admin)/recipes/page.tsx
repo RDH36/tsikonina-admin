@@ -1,7 +1,8 @@
-import { Plus } from "lucide-react";
-import Link from "next/link";
+import { Plus } from "lucide-react"
+import Link from "next/link"
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
+import { RecipeList } from "@/components/recipes/recipe-list"
 
 export default function Recipes() {
   return (
@@ -15,6 +16,7 @@ export default function Recipes() {
           </Button>
         </Link>
       </div>
+      <RecipeList />
     </div>
-  );
+  )
 }
