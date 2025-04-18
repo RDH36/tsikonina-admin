@@ -5,7 +5,7 @@ export type Recipe = {
   image_url: string | null
   time: number
   difficulty: "Facile" | "Moyen" | "Difficile"
-  category: string
+  category: "normal" | "populaire" | "decouverte"
   is_premium: boolean
   region: string
   history: string

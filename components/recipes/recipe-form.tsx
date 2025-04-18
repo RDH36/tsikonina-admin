@@ -52,17 +52,16 @@ export function RecipeForm({ initialData }: RecipeFormProps) {
       : {
           title: "",
           description: "",
-          difficulty: undefined,
-          time: 30,
-          image: null,
-          category: "",
+          time: 0,
+          difficulty: "Facile",
+          category: "normal",
           isPremium: false,
           region: "",
           history: "",
           culturalContext: "",
-          ingredients: [""],
+          ingredients: [],
           substitutes: [],
-          instructions: [""],
+          instructions: [],
         },
   })
 
