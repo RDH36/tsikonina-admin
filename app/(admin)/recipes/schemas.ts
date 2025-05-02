@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 export const recipeFormSchema = z.object({
   id: z.string().optional(),
@@ -13,9 +13,9 @@ export const recipeFormSchema = z.object({
     required_error: "La catégorie est requise",
   }),
   isPremium: z.boolean(),
-  region: z.string().min(1, "La région est requise"),
-  history: z.string().min(1, "L'historique est requis"),
-  culturalContext: z.string().min(1, "Le contexte culturel est requis"),
+  region: z.string(),
+  history: z.string(),
+  culturalContext: z.string(),
   ingredients: z.array(z.string()).min(1, "Au moins un ingrédient est requis"),
   substitutes: z
     .array(
@@ -28,6 +28,6 @@ export const recipeFormSchema = z.object({
   instructions: z
     .array(z.string())
     .min(1, "Au moins une instruction est requise"),
-})
+});
 
-export type RecipeFormValues = z.infer<typeof recipeFormSchema>
+export type RecipeFormValues = z.infer<typeof recipeFormSchema>;
