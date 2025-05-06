@@ -1,28 +1,29 @@
-"use client";
+"use client"
 
 import {
+  Bell,
   ChefHat,
   LayoutDashboard,
   Loader2,
   LogOut,
   Users,
   UtensilsCrossed,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import * as React from "react";
+} from "lucide-react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import * as React from "react"
 
-import { logout } from "@/app/(auth)/login/actions";
-import { TeamSwitcher } from "@/components/team-switcher";
+import { logout } from "@/app/(auth)/login/actions"
+import { TeamSwitcher } from "@/components/team-switcher"
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar";
-import { useState } from "react";
-import { Button } from "./ui/button";
+} from "@/components/ui/sidebar"
+import { useState } from "react"
+import { Button } from "./ui/button"
 
 const data = {
   teams: {
@@ -46,18 +47,23 @@ const data = {
       href: "/users",
       icon: Users,
     },
+    {
+      name: "Notification",
+      href: "/notification",
+      icon: Bell,
+    },
   ],
-};
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const [isLoading, setIsLoading] = useState(false);
-  const pathname = usePathname();
+  const [isLoading, setIsLoading] = useState(false)
+  const pathname = usePathname()
 
   const handleLogout = async () => {
-    setIsLoading(true);
-    await logout();
-    setIsLoading(false);
-  };
+    setIsLoading(true)
+    await logout()
+    setIsLoading(false)
+  }
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -67,7 +73,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent className="p-4">
         <nav className="flex flex-col gap-1">
           {data.navMain.map((item) => {
-            const isActive = pathname === item.href;
+            const isActive = pathname === item.href
             return (
               <Link
                 key={item.name}
@@ -81,7 +87,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <item.icon className="size-4" />
                 <span>{item.name}</span>
               </Link>
-            );
+            )
           })}
         </nav>
       </SidebarContent>
@@ -98,5 +104,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  );
+  )
 }

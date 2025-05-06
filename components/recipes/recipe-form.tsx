@@ -20,6 +20,7 @@ import { RecipeCulturalInfo } from "./recipe-cultural-info"
 import { RecipeInstructions } from "./recipe-instructions"
 import { createClient } from "@/utils/supabase/client"
 import { Recipe } from "@/types/recipe"
+import { sendNotifications } from "@/app/(admin)/notification/actions/sendNotify"
 
 interface RecipeFormProps {
   initialData?: Recipe
@@ -76,8 +77,6 @@ export function RecipeForm({ initialData }: RecipeFormProps) {
         toast.error("Vous devez être connecté pour créer une recette")
         return
       }
-
-      // Gestion de l'image
       let imageUrl = initialData?.image_url || null
       if (data.image instanceof File) {
         const file = data.image
@@ -99,7 +98,6 @@ export function RecipeForm({ initialData }: RecipeFormProps) {
       }
 
       if (initialData) {
-        // Mise à jour de la recette
         const { error } = await supabase
           .from("recipes")
           .update({
@@ -122,7 +120,6 @@ export function RecipeForm({ initialData }: RecipeFormProps) {
         if (error) throw error
         toast.success("Recette mise à jour avec succès")
       } else {
-        // Création d'une nouvelle recette
         const { error } = await supabase.from("recipes").insert({
           title: data.title,
           description: data.description,
@@ -141,6 +138,11 @@ export function RecipeForm({ initialData }: RecipeFormProps) {
         })
 
         if (error) throw error
+
+        await sendNotifications({
+          title: `✨ Une touche de saveur t’attend : ${data.title} ✨`,
+          body: `Laisse-toi emporter par les arômes de ${data.title}, fraîchement ajoutée sur Tsikonina.`,
+        })
         toast.success("Recette créée avec succès")
       }
 
